@@ -57,8 +57,8 @@ acquired-podcast-rag/
 1. Clone the repository:
 
    ```cmd
-   git clone https://github.com/your-repo/acquired-podcast-rag.git
-   cd acquired-podcast-rag
+   git clone https://github.com/PongoAI/pongo-podcast-benchmark/tree/main.git
+   cd pongo-podcast-benchmark
    ```
 
 2. Create a virtual environment:
@@ -70,8 +70,8 @@ acquired-podcast-rag/
 
 3. Install required packages:
 
-   ```python
-   pip install llama-index pinecone-client openai pongo azure-search-documents datasets
+   ```cmd
+   pip install -r requirements.txt
    ```
 
 4. Set up environment variables:
@@ -177,6 +177,50 @@ To test with custom queries:
 1. Modify the respective run script to accept user input instead of reading from a CSV file.
 2. Run the script and enter your query when prompted.
 3. The script will return relevant context from the podcast transcripts based on your query.
+
+## Benchmark Results
+
+This project includes a benchmark comparing Pongo's semantic filter with vector search and Cohere Reranker. The results show significant improvements in retrieval accuracy:
+
+- Vector Search: MRR@3 = 0.69
+- Vector Search + Cohere Reranker: MRR@3 = 0.76
+- Vector Search + Pongo Semantic Filter: MRR@3 = 0.93
+
+## Dataset
+
+The benchmark uses transcripts from 192 episodes of the Acquired podcast, totaling approximately 150 hours of content or 10 million tokens. The question set consists of 65 carefully crafted questions.
+
+## Evaluation Metric
+
+Mean Reciprocal Rank (MRR) is used as the primary evaluation metric, measured for the top 3 and top 5 results.
+
+## Using Pongo's Semantic Filter
+
+### To use Pongo's semantic filter in your project:
+
+1. Initialize the Pongo client with your API key:
+
+   ```python
+   pongo_client = pongo.PongoClient('YOUR_PONGO_SECRET_KEY')
+   ```
+
+2. Perform a search query using the Pongo API:
+
+```python
+   response = pongo_client.search(query=query, sub_org_id=sub_org_id)
+```
+
+3.  Process the results as shown in the `perform_pongo_search` and `build_context_string` functions.
+
+## How Pongo Differs
+
+Pongo's semantic filter uses a multi-model approach combining multi-vector, dense vector, and sparse retrieval techniques. This approach helps mitigate hallucinations and improves accuracy compared to single-model methods.
+
+## Resources
+
+- [Full Blog Post](https://pongoai.notion.site/Pongo-Podcast-Benchmark-cca7e1e698a34a4bb95e5ee4207ed754)
+- [GitHub Repository](https://github.com/PongoAI/pongo-podcast-benchmark/tree/main)
+- [Question Set](https://docs.google.com/spreadsheets/d/1YJBV2Mi6DXL5baVUFae4DwM0ibMKvUeysY-JIbW1PJE/edit#gid=1635447648)
 
 ## Troubleshooting
 
